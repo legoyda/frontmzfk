@@ -54,7 +54,7 @@ const DELETE_NOTE = gql`
     }
 `
 
-function App() {
+function Todos() {
     const {loading, error, data} = useQuery(EXCHANGE_RATES);
     const [createNote, {err}] = useMutation(CREATE_NOTE);
     const [deleteNote, {errr}] = useMutation(DELETE_NOTE);
@@ -80,7 +80,7 @@ function App() {
     };
 
     return (
-        <div className="App">
+        <div className="Todos">
             {data.getNotes.map((data) => <>
                 <p key={data.title}>
                     {data.title}:{data.description}:{data.id}
@@ -97,7 +97,7 @@ function App() {
         </div>);
 }
 
-export default App;
+export default Todos;
 
 /*
 return data.getNotes.map(({id, title, description}) =>
