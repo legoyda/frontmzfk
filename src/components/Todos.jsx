@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState,} from "react";
 import {
     Box,
     Button,
@@ -41,44 +41,52 @@ const EXCHANGE_RATES = gql`
 const CREATE_NOTE = gql`
     mutation($title: String, $description: String){
         createNote(
-            title:"$title"
-            description:"$description"
-  ) 
+            title: $title
+            description: $description
+        ) {
+            title
+            description
+        }
 }
 `
 const DELETE_NOTE = gql`
-    mutation{
-        deleteNote(
-        id:"11"
-        )        
+    mutation($id: String) {
+        deleteNote(id: $id) {
+            id
+        }
     }
 `
 
 function Todos() {
-    const {loading, error, data} = useQuery(EXCHANGE_RATES);
+    const {loading, error, data, refetch} = useQuery(EXCHANGE_RATES);
     const [createNote, {err}] = useMutation(CREATE_NOTE);
     const [deleteNote, {errr}] = useMutation(DELETE_NOTE);
-    const [title, setTitle] = useState(null);
-    const [description, setDescription] = useState(null);
+    const [title, setTitle] = useState([]);
+    const [description, setDescription] = useState([]);
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error :(</p>;
+
     const addNote = () => {
         createNote({
             variables: {
                 title: title,
                 description: description,
-
             }
+        }).then((res) =>{
+            refetch()
         });
     };
+
+
     const removeNote = (id) => {
         deleteNote({
             variables: {
                 id: id,
             },
+        }).then((res) => {
+            refetch()
         });
     };
-
     return (
         <div className="Todos">
             {data.getNotes.map((data) => <>
